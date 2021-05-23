@@ -14,20 +14,27 @@
 # WORD
 ####
 
+# Define variables
 DICTIONARY_DIR=/usr/share/dict/words
-letters=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
-max_value=-1
-accompanying_letter=""
-for var in ${letters[@]}; do
-    filename="$var".txt
-    grep "^[$var]" $DICTIONARY_DIR > ./$filename
-    
-    num_words=$( cat ./$filename | wc -l )
-    if [ $num_words -gt $max_value ] ; then
-        max_value=$num_words
-        accompanying_letter=$var
+LETTERS=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
+MAX_VALUE=-1
+ACCOMPANYING_LETTER=""
+
+# Iterate through the lowercase letters
+# Can this be done using ASCII addresses instead?
+for var in ${LETTERS[@]}; do
+    # define file name
+    FILENAME="$var".txt
+    grep "^[$var]" $DICTIONARY_DIR > ./$FILENAME
+   
+    # check if the current file has more words than previous files
+    NUM_WORDS=$( cat ./$filename | wc -l )
+    if [ $NUM_WORDS -gt $MAX_VALUE ] ; then
+        MAX_VALUE=$NUM_WORDS
+        ACCOMPANYING_LETTER=$var
     fi
 done
 
-echo "The letter $accompanying_letter begins with the largest number of words: $max_value"
-head -n 20 ./$accompanying_letter.txt
+# Output for the in class assignment
+echo "The letter $ACCOMPANYING_LETTER begins with the largest number of words: $MAX_VALUE"
+head -n 20 ./$ACCOMPANYING_LETTER.txt
