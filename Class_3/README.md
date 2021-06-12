@@ -172,7 +172,7 @@ The right (`>>`) and left (`<<`) shift operators move the bits, the number of bi
 00110000  - b << 2
 00000011  - b >> 2
 ```
-### Bit Fields
+#### Bit Fields
 Bit fields can be used to set up miniature structures in a byte, word or dword.
 As an example for this, the efficient implementation of a date struct can use a bit field. See the following example:
 ```
@@ -191,3 +191,4 @@ This struct can be stored in 3 bytes and the 24th bit can be ignored, because 5+
   |                           |       |         |
   +------ year ---------------+ month +-- day --+
 ```
+
