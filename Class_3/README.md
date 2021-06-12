@@ -192,3 +192,61 @@ This struct can be stored in 3 bytes and the 24th bit can be ignored, because 5+
   +------ year ---------------+ month +-- day --+
 ```
 
+### Parity Checking
+Parity checking is a means for two devices that are communicating with eachother to be sure that the inofrmation being sent is correct. It is a very basic level of checking for correct data transission and is not full-proof.
+This is done by counting the number of 1s in a sent message and labeline as even or odd, depending on the number of 1s. 
+**Even parity adds a 1 or 0 at the end/beginning of a bit to make it so that the sent message has even parity**
+**Odd parity adds a 1 or 0 at the end/beginning of a bit to make it so that the sent message has odd parity**
+
+The algorithm can be explained with the following pseudo-code:
+```
+Object input;
+bool parity = 0; //initalize to zero
+while( input )
+  parity = !parity;
+  input = input & (input - 1);
+
+return parity;
+```
+This algorithm has the variable `parity` which switches between 0 and 1 to indicate even or odd. The `4` operand with the two ASCII representations of the object count the number of 1s that the object can be represented with i.e.
+```
+1100001 - ASCII(49): 1
+1100000 - & ASCII(48): 0 
+---------
+1100000 // has one less 1 in the byte representation of ASCII
+```
+## Debugging with GDB
+GDB (Gnome Debugger) is a debugging tool that can be very powerful when the issu is not exactly known.
+To have a program run using gdb, use the `-g` flag in you gcc command and then run `gdb <EXECUTABLE>`.
+### Common commands while in gdb
+ - `q` or `quit` to exit
+ - `r` or `run` to run the program. From this line command line arguments can also be used
+ - `p` or `print` to print out a variable or expression
+ - `break` to set a breakpoint at on a line
+ - `delete` to delete a breakpoint
+ - `n` or `next` to run the next line of code
+ - `s` or `step` to run the next line of code or step into the next functions first line
+ - `c` to continue running you program until the breakpoint
+ - `l` to show all the programs code
+ - `where` gives you the nexsted list of all functions that have been called. If your program crashes calling a function like fscanf this will tell you which line of your own program made the call to fscanf that crashed.
+   - `up` and `down` allow you to travel through the call stack listed by where.
+
+For a more visual layout of the code, running `layout next` will bring up a window of the program and have a terminal-like section at the bottom which allows the user to follow lines from the code.
+### Seg faults with GDB
+Using the `where` command is udeful for this.
+
+### Helpful gcc flags
+The following snippet of code consists of multiple valuable information:
+1. How to make variables in a make file
+2. How to include those variables in a gcc call
+3. Useful flags
+   1. the `fsanitize=address` option is very helpful in detecting memory, address, pointer issues but doesn't work well with gdb or valgrind. Try not to clash the two
+```
+CFLAGS = -ggdb3 -std=c11 -Wall -Wunused-parameter -Wstrict-prototypes -Werror -Wextra -Wshadow
+CFLAGS += -fsanitize=signed-integer-overflow -Wfloat-conversion
+CFLAGS += -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable
+CFLAGS += -fsanitize=address -fsanitize=undefined
+
+tricolor: tricolor.c
+	gcc -o $@ $^ $(CFLAGS)
+```
