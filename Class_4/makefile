@@ -6,3 +6,9 @@ example1: example1.c
 
 problem1: problem1.c
 	gcc -o $@ $^ -std=c11
+
+move_around: move_around.c
+	gcc -o $@ $^ -std=c11 -g
+
+problem2: problem2.c
+	gcc -o $@ $^ -std=c11 -g
